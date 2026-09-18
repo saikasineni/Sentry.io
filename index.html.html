@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sentry — Web Application Vulnerability Scanner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<div class="frame">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">◈</span>
+      <span class="brand-name">Sentry</span>
+    </div>
+    <p class="brand-sub">Web application vulnerability scanner</p>
+
+    <form id="scan-form" class="scan-form">
+      <label for="target-url">Target URL</label>
+      <input type="text" id="target-url" name="target-url" placeholder="http://testphp.vulnweb.com" autocomplete="off" required>
+
+      <fieldset class="checks">
+        <legend>Checks to run</legend>
+        <label class="check"><input type="checkbox" name="check" value="sqli" checked><span>SQL injection</span></label>
+        <label class="check"><input type="checkbox" name="check" value="xss" checked><span>Cross-site scripting</span></label>
+        <label class="check"><input type="checkbox" name="check" value="traversal" checked><span>Directory traversal</span></label>
+        <label class="check"><input type="checkbox" name="check" value="tls" checked><span>SSL / TLS configuration</span></label>
+        <label class="check"><input type="checkbox" name="check" value="headers" checked><span>Security headers</span></label>
+      </fieldset>
+
+      <label class="consent">
+        <input type="checkbox" id="consent" required>
+        <span>I'm authorized to test this target</span>
+      </label>
+
+      <button type="submit" id="run-scan" class="run-btn">Run scan</button>
+      <button type="button" id="stop-scan" class="stop-btn" hidden>Stop scan</button>
+    </form>
+
+    <div class="sidebar-footer">
+      <p>Educational and authorized testing only. This is a client-side demo interface — see <code>README.md</code> for what it can and can't actually reach from a browser.</p>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <header class="topbar">
+      <div class="topbar-target">
+        <span class="label">Target</span>
+        <span id="topbar-url">No scan yet</span>
+      </div>
+      <div class="topbar-status">
+        <span id="status-dot" class="status-dot status-idle"></span>
+        <span id="status-text">Idle</span>
+      </div>
+    </header>
+
+    <section class="summary" id="summary">
+      <div class="summary-card" data-severity="critical">
+        <span class="summary-count" id="count-critical">0</span>
+        <span class="summary-label">Critical</span>
+      </div>
+      <div class="summary-card" data-severity="high">
+        <span class="summary-count" id="count-high">0</span>
+        <span class="summary-label">High</span>
+      </div>
+      <div class="summary-card" data-severity="medium">
+        <span class="summary-count" id="count-medium">0</span>
+        <span class="summary-label">Medium</span>
+      </div>
+      <div class="summary-card" data-severity="pass">
+        <span class="summary-count" id="count-pass">0</span>
+        <span class="summary-label">Passed</span>
+      </div>
+    </section>
+
+    <div class="workspace">
+
+      <section class="panel log-panel">
+        <div class="panel-head">
+          <h2>Scan log</h2>
+          <span class="panel-hint">live</span>
+        </div>
+        <div class="log" id="log" aria-live="polite">
+          <p class="log-placeholder">Enter a target and run a scan to see activity here.</p>
+        </div>
+      </section>
+
+      <section class="panel report-panel">
+        <div class="panel-head">
+          <h2>Findings</h2>
+          <button id="export-btn" class="export-btn" disabled>Export report ↓</button>
+        </div>
+        <div class="report" id="report">
+          <p class="report-placeholder">Findings will appear here as each check completes.</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<template id="finding-template">
+  <article class="finding" data-severity="">
+    <div class="finding-head">
+      <span class="finding-sev"></span>
+      <h3 class="finding-title"></h3>
+    </div>
+    <p class="finding-detail"></p>
+    <p class="finding-evidence"></p>
+  </article>
+</template>
+
+<script src="js/checks.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
